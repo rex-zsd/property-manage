@@ -1,0 +1,97 @@
+a {
+  color: #ff4081;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+html {
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+.load-icon {
+  font-size: 30px !important;
+  vertical-align: middle;
+  /*硬件加速*/
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: myfirst 1s linear infinite;
+  animation: myfirst 1s linear infinite;
+  text-align: center;
+  @-webkit-keyframes myfirst {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes myfirst {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+}
+/**
+ * 图标字体
+ */
+ /* fallback */
+ @font-face {
+   font-family: 'Material Icons';
+   font-style: normal;
+   font-weight: 400;
+   src: url(./lib/fonts/MaterialIcons-Regular.eot); /* For IE6-8 */
+   src: local('Material Icons'),
+        local('MaterialIcons-Regular'),
+        url(./lib/fonts/MaterialIcons-Regular.woff2) format('woff2'),
+        url(./lib/fonts/MaterialIcons-Regular.woff) format('woff'),
+        url(./lib/fonts/MaterialIcons-Regular.ttf) format('truetype');
+ }
+
+ .material-icons {
+   font-family: 'Material Icons';
+   font-weight: normal;
+   font-style: normal;
+   font-size: 24px;  /* Preferred icon size */
+   display: inline-block;
+   line-height: 1;
+   text-transform: none;
+   letter-spacing: normal;
+   word-wrap: normal;
+   white-space: nowrap;
+   direction: ltr;
+
+   /* Support for all WebKit browsers. */
+   -webkit-font-smoothing: antialiased;
+   /* Support for Safari and Chrome. */
+   text-rendering: optimizeLegibility;
+
+   /* Support for Firefox. */
+   -moz-osx-font-smoothing: grayscale;
+
+   /* Support for IE. */
+   font-feature-settings: 'liga';
+ }
+
+ @font-face {
+   font-family: 'Roboto';
+   font-style: normal;
+   font-weight: 400;
+   src: local('Roboto'), local('Roboto-Regular'), url(https://fonts.gstatic.com/s/roboto/v15/CrYjSnGjrRCn0pd9VQsnFOvvDin1pK8aKteLpeZ5c0A.woff) format('woff');
+ }
