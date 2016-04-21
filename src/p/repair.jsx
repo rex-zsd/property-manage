@@ -56,7 +56,8 @@ const Repair = React.createClass({
     return {
       type: 1,
       picList: [],
-      disableButton: false
+      disableButton: false,
+      date: new Date()
     }
   },
   showWarn(content) {
@@ -92,6 +93,12 @@ const Repair = React.createClass({
     this.setState({
       desc: event.target.value
     })
+  },
+  handleDate(no, date) {
+    this.setState({
+      date: date
+    });
+    console.log(this.state.date);
   },
   render() {
     return (
@@ -134,8 +141,10 @@ const Repair = React.createClass({
                   textFieldStyle={{width: '100%'}}
                   hintText="Portrait Dialog"
                   autoOk={true}
-                  minDate={new Date()}
+                  minDate={this.state.date}
                   name="date"
+                  onChange={this.handleDate}
+                  value={this.state.date}
                 />
               </TableRowColumn>
             </TableRow>

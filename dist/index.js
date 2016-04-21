@@ -42210,7 +42210,8 @@
 	    return {
 	      type: 1,
 	      picList: [],
-	      disableButton: false
+	      disableButton: false,
+	      date: new Date()
 	    };
 	  },
 	  showWarn: function showWarn(content) {
@@ -42246,6 +42247,12 @@
 	    this.setState({
 	      desc: event.target.value
 	    });
+	  },
+	  handleDate: function handleDate(no, date) {
+	    this.setState({
+	      date: date
+	    });
+	    console.log(this.state.date);
 	  },
 	  render: function render() {
 	    return React.createElement(
@@ -42319,8 +42326,10 @@
 	                textFieldStyle: { width: '100%' },
 	                hintText: 'Portrait Dialog',
 	                autoOk: true,
-	                minDate: new Date(),
-	                name: 'date'
+	                minDate: this.state.date,
+	                name: 'date',
+	                onChange: this.handleDate,
+	                value: this.state.date
 	              })
 	            )
 	          ),
