@@ -7,6 +7,11 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 //页面
 import Index from './p/index.jsx';
 import Repair from './p/repair.jsx';
+import Complain from './p/complain.jsx';
+import User from './p/user.jsx';
+import RepairDetail from './p/repairDetail.jsx';
+import ComplainDetail from './p/complainDetail.jsx';
+
 //基础样式
 require('./style.less');
 //初始化
@@ -32,11 +37,14 @@ const App = React.createClass({
   }
 });
 
-
 ReactDOM.render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <Route path="repair" component={Repair}/>
+      <Route path="complain" component={Complain}/>
+      <Route path="user" component={User}/>
+      <Route path="repairDetail" component={RepairDetail}/>
+      <Route path="complainDetail" component={ComplainDetail}/>
       <IndexRoute component={Index}></IndexRoute>
     </Route>
   </Router>

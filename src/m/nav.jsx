@@ -1,10 +1,4 @@
 import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
-
-
 
 const styles = {
   title: {
@@ -16,6 +10,7 @@ const styles = {
     left: 0
   }
 };
+
 const Nav = React.createClass({
   render(){
     return (
@@ -24,7 +19,7 @@ const Nav = React.createClass({
         iconElementLeft={this.props.left}
         iconElementRight={this.props.right}
         style={styles.bar}
-        showMenuIconButton={false}
+        showMenuIconButton={this.props.left ? true : false}
       />
     )
   }

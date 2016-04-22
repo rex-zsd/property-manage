@@ -1,4 +1,7 @@
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import IconButton from 'material-ui/IconButton';
+import IconPublic from 'material-ui/svg-icons/social/public';
+
 import Nav from '../m/nav.jsx';
 import Menu from '../m/menu.jsx';
 
@@ -10,8 +13,7 @@ const styles = {
     lineHeight: '1.5em'
   },
   content: {
-    marginTop: '80px',
-    marginBottom: '88px'
+    padding: '80px 0 88px'
   }
 };
 
@@ -73,7 +75,7 @@ const Index = React.createClass({
       this.setState({
         isLoading: true
       });
-      fetch('http://192.168.31.111:10005/back/index?size=20')
+      fetch('http://192.168.199.111:10005/back/index?size=20')
       .then(function(res) {
         return res.json();
       })
@@ -98,10 +100,10 @@ const Index = React.createClass({
       <Bulletin bulletin={bulletin} key={index}/>
     ));
     return (
-      <div>
-        <Nav title="社区公告"/>
-        <div style={styles.content}>{bulletinList}</div>
-        <Menu index={0}/>
+      <div style={styles.content}>
+        <Nav title="社区公告" left={<IconButton><IconPublic /></IconButton>}/>
+        <div>{bulletinList}</div>
+        <Menu index={1}/>
       </div>
     )
   }

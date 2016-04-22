@@ -1,3 +1,4 @@
+//格式化日期
 Date.prototype.format = function(format) {
   var o = {
     "M+": this.getMonth() + 1, //month
@@ -20,3 +21,27 @@ Date.prototype.format = function(format) {
   }
   return format;
 };
+//设置cookie
+window.setCookie = function(name, value, expiredays) {
+  var exdate = new Date();
+  exdate.setDate(exdate.getDate() + expiredays);
+  document.cookie = name + "=" + escape(value);
+  document.cookie += ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
+}
+//取出cookie
+window.getCookie = function(c_name) {
+  if (document.cookie.length > 0) {
+    var c_start = document.cookie.indexOf(c_name + "=");
+    if (c_start != -1) {
+      c_start = c_start + c_name.length + 1;
+      var c_end = document.cookie.indexOf(";", c_start);
+      if (c_end == -1) c_end = document.cookie.length;
+      return unescape(document.cookie.substring(c_start, c_end));
+    }
+  }
+  return "";
+}
+//清除cookie
+window.clearCookie = function(name) {
+  window.setCookie(name, null, -1);
+}
