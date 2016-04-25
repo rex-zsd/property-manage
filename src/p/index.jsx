@@ -68,21 +68,26 @@ const Index = React.createClass({
    * @return {[type]} [description]
    */
   handleScroll(){
-    var self = this;
-    var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-    var docHeight = document.body.scrollHeight ;
+    const self = this;
+    const scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+    const docHeight = document.body.scrollHeight ;
+    const size = 10;
+    console.log(self.state.isLoading, self.state.isEnd);
     if (!self.state.isLoading && !self.state.isEnd && docHeight - scrollTop - windowHeight < 100) {
       this.setState({
         isLoading: true
       });
-      fetch('http://192.168.199.111:10005/back/index?size=20')
+      fetch(ZN.baseUrl + 'bulletin?size=' + size + '&start=' + this.state.bulletinList.length, {
+        method: 'get',
+        credentials: 'include'
+      })
       .then(function(res) {
         return res.json();
       })
       .then(function(res){
         self.setState({
           isLoading: false,
-          isEnd: res.data.length < 20,
+          isEnd: res.data.length < size,
           bulletinList: [...self.state.bulletinList, ...res.data]
         });
       })

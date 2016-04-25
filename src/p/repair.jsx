@@ -11,7 +11,6 @@ import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
 import IconBuild from 'material-ui/svg-icons/action/build';
 
-
 import Nav from '../m/nav.jsx';
 import Menu from '../m/menu.jsx';
 
@@ -87,8 +86,9 @@ const Repair = React.createClass({
       _imgList.forEach(function(img, index){
         form.append('file', img.file, img.name);
       });
-      fetch('http://192.168.199.111:10005/back/save', {
+      fetch(ZN.baseUrl + 'repair/save', {
         method: "post",
+        credentials: 'include',
         body: form
       })
       .then(function(res) {

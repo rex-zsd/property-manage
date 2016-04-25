@@ -11,6 +11,7 @@ import Complain from './p/complain.jsx';
 import User from './p/user.jsx';
 import RepairDetail from './p/repairDetail.jsx';
 import ComplainDetail from './p/complainDetail.jsx';
+import RepairList from './p/repairList.jsx';
 
 //基础样式
 require('./style.less');
@@ -37,6 +38,11 @@ const App = React.createClass({
   }
 });
 
+window.ZN = {
+  baseUrl: 'http://localhost:10005/back/',
+  imgUrl: 'http://localhost:10004/'
+};
+
 ReactDOM.render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>
@@ -45,6 +51,7 @@ ReactDOM.render((
       <Route path="user" component={User}/>
       <Route path="repairDetail" component={RepairDetail}/>
       <Route path="complainDetail" component={ComplainDetail}/>
+      <Route path="RepairList" component={RepairList}/>
       <IndexRoute component={Index}></IndexRoute>
     </Route>
   </Router>

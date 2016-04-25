@@ -39,13 +39,29 @@ const styles = {
 };
 
 const RepairDetail = React.createClass({
-  componentWillMount() {
-    this.setState({
-      type: '公共设施',
-      content: '12312321',
-      date: '2016-05-06',
+  getInitialState() {
+    return {
+      type: 1,
       picList: []
+    }
+  },
+  componentWillMount() {
+    const id = location.search.slice(1);
+    fetch(ZN.baseUrl + 'repair/detail?id=' + id, {
+      method: "get",
+      credentials: 'include'
+    })
+    .then((res) => res.json())
+    .then((res) => {
+      var repair = res.data;
+      this.setState({
+        type: ['', '个人住宅', '公共设施'][repair.type],
+        content: repair.content,
+        date: new Date(repair.date).format('yyyy-MM-dd'),
+        picList: repair.imgList
+      });
     });
+
   },
   handleBack() {
     browserHistory.goBack();
@@ -62,7 +78,7 @@ const RepairDetail = React.createClass({
               </TableRow>
               <TableRow displayBorder={false}>
                 <TableRowColumn style={styles.table.title}>报修内容</TableRowColumn>
-                <TableRowColumn>{this.state.content}</TableRowColumn>
+                <TableRowColumn style={{whiteSpace: 'pre'}}>{this.state.content}</TableRowColumn>
               </TableRow>
               <TableRow displayBorder={false}>
                 <TableRowColumn style={styles.table.title}>预约时间</TableRowColumn>
@@ -71,11 +87,11 @@ const RepairDetail = React.createClass({
               <TableRow displayBorder={false}>
                 <TableRowColumn style={styles.table.title}>相关图片</TableRowColumn>
                 <TableRowColumn style={styles.picBox}>
-                  {this.state.picList.map((src, index) => (
+                  {this.state.picList.map((pic, index) => (
                     <Paper
                       zDepth={2}
                       style={styles.picPaper}
-                      children={<img src={src} style={styles.pic}></img>}
+                      children={<img src={ ZN.imgUrl + pic.path} style={styles.pic}></img>}
                       key={index}
                     />
                   ))}

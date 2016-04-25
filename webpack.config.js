@@ -59,6 +59,7 @@ module.exports = {
     new webpack.ProvidePlugin({
       'React': 'react',
       'ReactDOM': 'react-dom',
+      '_': 'lodash'
       // 'fetch': 'whatwg-fetch'
     })
   ]

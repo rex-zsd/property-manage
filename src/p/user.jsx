@@ -9,6 +9,7 @@ import IconButton from 'material-ui/IconButton';
 import IconPerson from 'material-ui/svg-icons/social/person';
 import IconPersonOutLine from 'material-ui/svg-icons/social/person-outline';
 import {browserHistory} from 'react-router';
+import Snackbar from 'material-ui/Snackbar';
 
 import Menu from '../m/menu.jsx';
 import Nav from '../m/nav.jsx';
@@ -16,6 +17,9 @@ import Nav from '../m/nav.jsx';
 const styles = {
   content: {
     padding: '80px 0 88px'
+  },
+  tip: {
+    marginBottom: '72px'
   }
 };
 
@@ -28,7 +32,11 @@ const User = React.createClass({
       userText: isLogIn ? userName : null,
       isLogIn: isLogIn,
       openLogIn: false,
-      openLogOut: false
+      openLogOut: false,
+      username: '',
+      password: '',
+      openTip: false,
+      tipText: ''
     };
   },
   //关闭登录模态框
@@ -43,15 +51,89 @@ const User = React.createClass({
       openLogIn: true
     });
   },
+  //登陆
+  handleLogIn() {
+    const username = _.trim(this.state.username);
+    const password = _.trim(this.state.password);
+    if(!username.length) {
+      this.setState({
+        tipText: '请填写用户名',
+        openTip: true
+      });
+    } else if(!password.length) {
+      this.setState({
+        tipText: '请填写密码',
+        openTip: true
+      });
+    } else {
+      fetch(ZN.baseUrl + 'users/login', {
+        method: 'post',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password
+        })
+      })
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({
+          tipText: res.info,
+          openTip: true
+        });
+        if(res.status == 100) {
+          this.setState({
+            userText: this.state.username,
+            isLogIn: true,
+            openLogIn: false
+          });
+        }
+      });
+    }
+  },
   //注册账号
   handleRegister() {
-    window.setCookie('TOKEN', 123);
-    window.setCookie('USERNAME', 123);
-    this.setState({
-      userText: 123,
-      isLogIn: true,
-      openLogIn: false
-    });
+    const username = _.trim(this.state.username);
+    const password = _.trim(this.state.password);
+    if(!username.length) {
+      this.setState({
+        tipText: '请填写用户名',
+        openTip: true
+      });
+    } else if(!password.length) {
+      this.setState({
+        tipText: '请填写密码',
+        openTip: true
+      });
+    } else {
+      fetch(ZN.baseUrl + 'users/register', {
+        method: 'post',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password
+        })
+      })
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({
+          tipText: res.info,
+          openTip: true
+        });
+        if(res.status == 100) {
+          this.setState({
+            userText: this.state.username,
+            isLogIn: true,
+            openLogIn: false
+          });
+        }
+      });
+    }
   },
   //关闭登出模态框
   handleCloseLogOut() {
@@ -72,14 +154,31 @@ const User = React.createClass({
     this.setState({
       isLogIn: false,
       userText: null,
-      openLogOut: false
-    })
+      openLogOut: false,
+      tipText: '登出成功',
+      openTip: true
+    });
   },
   handleRepair() {
-    browserHistory.push('repairDetail');
+    browserHistory.push('repairList');
   },
   handleComplain() {
     browserHistory.push('complainDetail');
+  },
+  handleUserName(event) {
+    this.setState({
+      username: event.target.value
+    });
+  },
+  handlePassWord(event) {
+    this.setState({
+      password: event.target.value
+    });
+  },
+  handleTip() {
+    this.setState({
+      openTip: false
+    });
   },
   render() {
     const logInActions = [
@@ -97,7 +196,7 @@ const User = React.createClass({
         label="登录"
         primary={true}
         keyboardFocused={true}
-        onTouchTap={this.handleClose}
+        onTouchTap={this.handleLogIn}
       />,
     ];
     const logOutActions = [
@@ -135,23 +234,34 @@ const User = React.createClass({
         >
           <TextField
             hintText="用户名"
-            maxLength={10}
+            maxLength={11}
             fullWidth={true}
+            value={this.state.username}
+            onRequestClose={this.handleCloseLogOut}
+            onChange={this.handleUserName}
             /><br/>
           <TextField
             hintText="密码"
             type="password"
             maxLength={10}
             fullWidth={true}
+            value={this.state.password}
+            onChange={this.handlePassWord}
           />
         </Dialog>
         <Dialog
           title='确定要退出？'
           actions={logOutActions}
           open={this.state.openLogOut}
-          onRequestClose={this.handleCloseLogOut}
         >
         </Dialog>
+        <Snackbar
+          open={this.state.openTip}
+          message={this.state.tipText}
+          autoHideDuration={2000}
+          onRequestClose={this.handleTip}
+          style={styles.tip}
+        />
       </div>
     )
   }
