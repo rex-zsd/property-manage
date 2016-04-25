@@ -38,10 +38,26 @@ const styles = {
 };
 
 const ComplainDetail = React.createClass({
+  getInitialState() {
+    return {
+      content: '',
+      picList: [],
+    }
+  },
   componentWillMount() {
-    this.setState({
-      content: '123123123',
-      picList: []
+    const id = location.search.slice(1);
+    fetch(ZN.baseUrl + 'complain/detail?id=' + id, {
+      method: "get",
+      credentials: 'include'
+    })
+    .then((res) => res.json())
+    .then((res) => {
+      var complain = res.data;
+      this.setState({
+        content: complain.content,
+        picList: complain.imgList,
+        createDate: complain.createDate
+      });
     });
   },
   handleBack() {
@@ -57,6 +73,10 @@ const ComplainDetail = React.createClass({
         <Table selectable={false}>
           <TableBody displayRowCheckbox={false}>
             <TableRow displayBorder={false}>
+              <TableRowColumn style={styles.table.title}>创建时间</TableRowColumn>
+              <TableRowColumn>{new Date(this.state.createDate).format('yyyy-MM-dd hh:mm')}</TableRowColumn>
+            </TableRow>
+            <TableRow displayBorder={false}>
               <TableRowColumn style={styles.table.title}>投诉内容</TableRowColumn>
               <TableRowColumn>{this.state.content}</TableRowColumn>
             </TableRow>
@@ -65,11 +85,11 @@ const ComplainDetail = React.createClass({
                 <div>相关图片</div>
               </TableRowColumn>
               <TableRowColumn style={styles.picBox}>
-                {this.state.picList.map((src, index) => (
+                {this.state.picList.map((pic, index) => (
                   <Paper
                     zDepth={2}
                     style={styles.picPaper}
-                    children={<img src={src} style={styles.pic}></img>}
+                    children={<img src={ZN.imgUrl + pic.path} style={styles.pic}></img>}
                     key={index}
                   />
                 ))}

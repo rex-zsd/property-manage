@@ -159,22 +159,27 @@ const User = React.createClass({
       openTip: true
     });
   },
+  //前往报修列表
   handleRepair() {
     browserHistory.push('repairList');
   },
+  //前往投诉列表
   handleComplain() {
-    browserHistory.push('complainDetail');
+    browserHistory.push('complainList');
   },
+  //输入用户名
   handleUserName(event) {
     this.setState({
       username: event.target.value
     });
   },
+  //输入密码
   handlePassWord(event) {
     this.setState({
       password: event.target.value
     });
   },
+  //关闭提示
   handleTip() {
     this.setState({
       openTip: false

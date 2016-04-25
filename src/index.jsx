@@ -12,6 +12,7 @@ import User from './p/user.jsx';
 import RepairDetail from './p/repairDetail.jsx';
 import ComplainDetail from './p/complainDetail.jsx';
 import RepairList from './p/repairList.jsx';
+import ComplainList from './p/complainList.jsx';
 
 //基础样式
 require('./style.less');
@@ -51,7 +52,8 @@ ReactDOM.render((
       <Route path="user" component={User}/>
       <Route path="repairDetail" component={RepairDetail}/>
       <Route path="complainDetail" component={ComplainDetail}/>
-      <Route path="RepairList" component={RepairList}/>
+      <Route path="repairList" component={RepairList}/>
+      <Route path="complainList" component={ComplainList}/>
       <IndexRoute component={Index}></IndexRoute>
     </Route>
   </Router>

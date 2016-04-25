@@ -73,8 +73,9 @@ const Repair = React.createClass({
       _imgList.forEach(function(img, index){
         form.append('file', img.file, img.name);
       });
-      fetch('http://192.168.199.111:10005/back/save', {
+      fetch( ZN.baseUrl + 'complain/save', {
         method: "post",
+        credentials: 'include',
         body: form
       })
       .then(function(res) {
@@ -83,12 +84,12 @@ const Repair = React.createClass({
       .then(function(res){
         if(res.status == 100){
           self.setState({
-            tipText: '保存成功',
+            tipText: res.info,
             openTip: true
           });
         } else {
           self.setState({
-            tipText: '保存失败',
+            tipText: res.info,
             openTip: true
           });
         }

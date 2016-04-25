@@ -58,7 +58,8 @@ const RepairDetail = React.createClass({
         type: ['', '个人住宅', '公共设施'][repair.type],
         content: repair.content,
         date: new Date(repair.date).format('yyyy-MM-dd'),
-        picList: repair.imgList
+        picList: repair.imgList,
+        createDate: repair.createDate
       });
     });
 
@@ -72,6 +73,10 @@ const RepairDetail = React.createClass({
         <Nav title="报修详情" left={<IconButton onTouchTap={this.handleBack}><IconLeft/></IconButton>}/>
           <Table selectable={false}>
             <TableBody displayRowCheckbox={false}>
+              <TableRow displayBorder={false}>
+                <TableRowColumn style={styles.table.title}>创建时间</TableRowColumn>
+                <TableRowColumn>{new Date(this.state.createDate).format('yyyy-MM-dd hh:mm')}</TableRowColumn>
+              </TableRow>
               <TableRow displayBorder={false}>
                 <TableRowColumn style={styles.table.title}>报修类型</TableRowColumn>
                 <TableRowColumn>{this.state.type}</TableRowColumn>

@@ -10,6 +10,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
 import IconBuild from 'material-ui/svg-icons/action/build';
+import {browserHistory} from 'react-router';
 
 import Nav from '../m/nav.jsx';
 import Menu from '../m/menu.jsx';
@@ -97,12 +98,15 @@ const Repair = React.createClass({
       .then(function(res){
         if(res.status == 100){
           self.setState({
-            tipText: '保存成功',
+            tipText: res.info,
             openTip: true
           });
+          setTimeout(function(){
+            browserHistory.push('/repairDetail?' + res.data.id);
+          }, 1000);
         } else {
           self.setState({
-            tipText: '保存失败',
+            tipText: res.info,
             openTip: true
           });
         }

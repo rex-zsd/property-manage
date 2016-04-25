@@ -11,29 +11,28 @@ const styles = {
   }
 };
 
-const RepairList = React.createClass({
+const ComplainList = React.createClass({
   getInitialState() {
     return {
-      repairList: [], //报修列表
+      complainList: [], //投诉列表
     }
   },
   componentWillMount() {
-    fetch(ZN.baseUrl + 'repair/list', {
+    fetch(ZN.baseUrl + 'complain/list', {
       credentials: 'include',
       method: 'get'
     })
     .then((res) => res.json())
     .then((res) => {
-
       this.setState({
-        repairList: res.data
+        complainList: res.data
       });
     });
   },
-  handleRepair(selected) {
+  handleComplain(selected) {
     selected = selected[0];
-    const repair = this.state.repairList[selected];
-    browserHistory.push('/repairDetail?' + repair._id);
+    const complain = this.state.complainList[selected];
+    browserHistory.push('/complainDetail?' + complain._id);
   },
   handleBack() {
     browserHistory.goBack();
@@ -45,16 +44,16 @@ const RepairList = React.createClass({
   render() {
     return (
       <div style={styles.content}>
-        <Nav title="报修列表" left={<IconButton onTouchTap={this.handleBack}><IconLeft /></IconButton>}/>
-        <Table onRowSelection={this.handleRepair}>
+        <Nav title="投诉列表" left={<IconButton onTouchTap={this.handleBack}><IconLeft /></IconButton>}/>
+        <Table onRowSelection={this.handleComplain}>
           <TableBody displayRowCheckbox={false}>
-            {this.state.repairList.map( (repair, index) => (
+            {this.state.complainList.map( (complain, index) => (
               <TableRow key={index}>
                 <TableRowColumn>
-                  {repair.content}
+                  {complain.content}
                 </TableRowColumn>
                 <TableRowColumn style={{textAlign: 'right'}}>
-                  {new Date(repair.createDate).format('yyyy-MM-dd hh:mm')}
+                  {new Date(complain.createDate).format('yyyy-MM-dd hh:mm')}
                 </TableRowColumn>
               </TableRow>
               ))}
@@ -65,4 +64,4 @@ const RepairList = React.createClass({
   }
 });
 
-export default RepairList;
+export default ComplainList;
