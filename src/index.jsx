@@ -42,8 +42,8 @@ const App = React.createClass({
 });
 
 window.ZN = {
-  baseUrl: 'http://localhost:10005/back/',
-  imgUrl: 'http://localhost:10004/'
+  baseUrl: 'http://192.168.199.111:10005/back/',
+  imgUrl: 'http://192.168.199.111:10004/'
 };
 
 ReactDOM.render((

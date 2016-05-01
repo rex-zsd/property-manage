@@ -228,8 +228,8 @@ const User = React.createClass({
         </List>
         <Divider inset={true}/>
         <List style={{display: this.state.isLogIn ? 'block' : 'none'}}>
-          <ListItem primaryText="我的报修" leftIcon={<IconList/>} onTouchTap={this.handleRepair}/>
-          <ListItem primaryText="我的投诉" insetChildren={true} onTouchTap={this.handleComplain}/>
+          <ListItem primaryText="我的报修" leftIcon={<IconList/>} onClick={this.handleRepair}/>
+          <ListItem primaryText="我的投诉" insetChildren={true} onClick={this.handleComplain}/>
         </List>
         <Menu index={4}/>
         <Dialog
