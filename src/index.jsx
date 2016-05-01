@@ -15,7 +15,8 @@ import RepairList from './p/repairList.jsx';
 import ComplainList from './p/complainList.jsx';
 
 //基础样式
-require('./style.less');
+import styles from './style.less';
+console.log(styles);
 //初始化
 import './init.js';
 //fetch组件
@@ -32,6 +33,7 @@ const App = React.createClass({
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
         <div>
+          <div className={styles.v} className='J_a'></div>
           {this.props.children}
         </div>
       </MuiThemeProvider>

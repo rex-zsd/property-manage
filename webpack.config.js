@@ -21,10 +21,10 @@ module.exports = {
       }
     }, {
       test: /\.css$/,
-      loader: 'style!css'
+      loader: 'style!css?modules&localIdentName=[name]__[local]___[hash:base64:5]'
     },{
       test: /\.less$/,
-      loader: 'style!css!less'
+      loader: 'style!css?modules&localIdentName=[name]__[local]___[hash:base64:5]!less'
     }, {
       test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
       loader: 'url?limit=10000&minetype=application/font-woff'
