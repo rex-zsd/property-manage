@@ -10,6 +10,10 @@ import IconPerson from 'material-ui/svg-icons/social/person';
 import IconPersonOutLine from 'material-ui/svg-icons/social/person-outline';
 import {browserHistory} from 'react-router';
 import Snackbar from 'material-ui/Snackbar';
+import IconBuild from 'material-ui/svg-icons/action/build';
+import IconBad from 'material-ui/svg-icons/social/sentiment-dissatisfied';
+import IconLogOut from 'material-ui/svg-icons/social/person-outline';
+import IconSetting from 'material-ui/svg-icons/action/settings';
 
 import Menu from '../m/menu.jsx';
 import Nav from '../m/nav.jsx';
@@ -36,7 +40,10 @@ const User = React.createClass({
       username: '',
       password: '',
       openTip: false,
-      tipText: ''
+      tipText: '',
+      openNewPassword: false,
+      newPasswordOne: '',
+      newPasswordTwo: ''
     };
   },
   //关闭登录模态框
@@ -185,6 +192,70 @@ const User = React.createClass({
       openTip: false
     });
   },
+  //输入新密码一
+  handleNewPassWordOne(event) {
+    this.setState({
+      newPasswordOne: event.target.value
+    });
+  },
+  //输入新密码二
+  handleNewPassWordTwo(event) {
+    this.setState({
+      newPasswordTwo: event.target.value
+    });
+  },
+  //修改密码
+  handleNewPassword() {
+    this.setState({
+      openNewPassword: true
+    });
+  },
+  //取消修改密码
+  handleCloseNewPassword() {
+    this.setState({
+      openNewPassword: false
+    });
+  },
+  //确认修改密码
+  handleSubmitNewPassword() {
+    var self = this;
+    if(this.state.newPasswordOne != this.state.newPasswordTwo) {
+      this.setState({
+        tipText: '两次密码不一致',
+        openTip: true
+      });
+    } else {
+      fetch(ZN.baseUrl + 'users/password', {
+        method: 'post',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          password: this.state.newPasswordOne
+        })
+      })
+      .then(function(res) {
+        return res.json();
+      })
+      .then(function(res){
+        self.setState({
+          tipText: res.info,
+          openTip: true,
+          openNewPassword: false,
+          password: self.state.newPasswordOne,
+          newPasswordOne: undefined,
+          newPasswordTwo: undefined
+        });
+      })
+      .catch(err => {
+        self.setState({
+          tipText: err,
+          openTip: true,
+        });
+      });
+    }
+  },
   render() {
     const logInActions = [
       <FlatButton
@@ -216,6 +287,18 @@ const User = React.createClass({
         onTouchTap={this.handleLogOut}
       />
     ];
+    const newPasswordActions = [
+      <FlatButton
+        label="取消"
+        primary={true}
+        onTouchTap={this.handleCloseNewPassword}
+      />,
+      <FlatButton
+        label="确定"
+        primary={true}
+        onTouchTap={this.handleSubmitNewPassword}
+      />
+    ];
     return (
       <div style={styles.content}>
         <Nav title="个人中心" left={<IconButton><IconPerson /></IconButton>}/>
@@ -223,13 +306,15 @@ const User = React.createClass({
           <ListItem
             primaryText={this.state.userText || '请登录或注册'}
             leftIcon={ this.state.isLogIn ? <IconPerson/> : <IconPersonOutLine/> }
-            onTouchTap={this.state.isLogIn ? this.handleOpenLogOut : this.handleOpenLogIn}
+            onTouchTap={this.state.isLogIn ? function(){} : this.handleOpenLogIn}
           />
         </List>
         <Divider inset={true}/>
         <List style={{display: this.state.isLogIn ? 'block' : 'none'}}>
-          <ListItem primaryText="我的报修" leftIcon={<IconList/>} onClick={this.handleRepair}/>
-          <ListItem primaryText="我的投诉" insetChildren={true} onClick={this.handleComplain}/>
+          <ListItem primaryText="退出登录" leftIcon={<IconLogOut/>} onClick={this.handleOpenLogOut}/>
+          <ListItem primaryText="修改密码" leftIcon={<IconSetting/>} onClick={this.handleNewPassword}/>
+          <ListItem primaryText="我的报修" leftIcon={<IconBuild/>} onClick={this.handleRepair}/>
+          <ListItem primaryText="我的投诉" leftIcon={<IconBad/>} insetChildren={true} onClick={this.handleComplain}/>
         </List>
         <Menu index={4}/>
         <Dialog
@@ -242,7 +327,6 @@ const User = React.createClass({
             maxLength={11}
             fullWidth={true}
             value={this.state.username}
-            onRequestClose={this.handleCloseLogOut}
             onChange={this.handleUserName}
             /><br/>
           <TextField
@@ -252,6 +336,28 @@ const User = React.createClass({
             fullWidth={true}
             value={this.state.password}
             onChange={this.handlePassWord}
+          />
+        </Dialog>
+        <Dialog
+          actions={newPasswordActions}
+          open={this.state.openNewPassword}
+          onRequestClose={this.handleCloseNewPassword}
+        >
+          <TextField
+            hintText="请输入新的密码"
+            type="password"
+            maxLength={10}
+            fullWidth={true}
+            value={this.state.newPasswordOne}
+            onChange={this.handleNewPassWordOne}
+            /><br/>
+          <TextField
+            hintText="请再输入一次新密码"
+            type="password"
+            maxLength={10}
+            fullWidth={true}
+            value={this.state.newPasswordTwo}
+            onChange={this.handleNewPassWordTwo}
           />
         </Dialog>
         <Dialog

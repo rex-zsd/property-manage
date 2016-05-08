@@ -6,6 +6,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
 import IconBad from 'material-ui/svg-icons/social/sentiment-dissatisfied';
+import {browserHistory} from 'react-router';
+import Dialog from 'material-ui/Dialog';
 
 import Nav from '../m/nav.jsx';
 import Menu from '../m/menu.jsx';
@@ -55,47 +57,19 @@ const Repair = React.createClass({
       picList: [],
       disableButton: false,
       openTip: false,
-      tipText: ''
+      tipText: '',
+      openDialog: false
     }
   },
   handleSubmit() {
-    console.log(this.state);
-    var form = new FormData();
-    var state = this.state;
-    var self = this;
     if (!this.state.content) {
-      self.setState({
+      this.setState({
         tipText: '请填写投诉内容',
         openTip: true
       });
     } else {
-      form.append('content', state.content);
-      _imgList.forEach(function(img, index){
-        form.append('file', img.file, img.name);
-      });
-      fetch( ZN.baseUrl + 'complain/save', {
-        method: "post",
-        credentials: 'include',
-        body: form
-      })
-      .then(function(res) {
-        return res.json();
-      })
-      .then(function(res){
-        if(res.status == 100){
-          self.setState({
-            tipText: res.info,
-            openTip: true
-          });
-        } else {
-          self.setState({
-            tipText: res.info,
-            openTip: true
-          });
-        }
-      })
-      .catch(err => {
-        alert(err)
+      this.setState({
+        openDialog: true
       });
     }
   },
@@ -142,7 +116,60 @@ const Repair = React.createClass({
       openTip: false
     });
   },
+  handleCloseSubmit() {
+    this.setState({
+      openDialog: false
+    });
+  },
+  handleFetch() {
+    var form = new FormData();
+    var state = this.state;
+    var self = this;
+    form.append('content', state.content);
+    _imgList.forEach(function(img, index){
+      form.append('file', img.file, img.name);
+    });
+    fetch( ZN.baseUrl + 'complain/save', {
+      method: "post",
+      credentials: 'include',
+      body: form
+    })
+    .then(function(res) {
+      return res.json();
+    })
+    .then(function(res){
+      if(res.status == 100){
+        self.setState({
+          tipText: res.info,
+          openTip: true
+        });
+        setTimeout(function(){
+          browserHistory.push('/complainDetail?' + res.data.id);
+        }, 2000);
+      } else {
+        self.setState({
+          tipText: res.info,
+          openTip: true
+        });
+      }
+    })
+    .catch(err => {
+      alert(err)
+    });
+  },
   render() {
+    const submitActions = [
+      <FlatButton
+        label="取消"
+        primary={true}
+        onTouchTap={this.handleCloseSubmit}
+      />,
+      <FlatButton
+        label="确定"
+        primary={true}
+        onTouchTap={this.handleFetch}
+      />
+    ];
     return (
       <div style={styles.content}>
         <Nav
@@ -172,8 +199,7 @@ const Repair = React.createClass({
             </TableRow>
             <TableRow displayBorder={false}>
               <TableRowColumn style={styles.table.title}>
-                <div>相关图片</div>
-                <RaisedButton label="点我添加" primary={true} onClick={this.addImg} style={styles.button} disabled={this.state.disableButton}/>
+                <RaisedButton label="添加图片" primary={true} onClick={this.addImg} style={styles.button} disabled={this.state.disableButton}/>
                 <input type="file" ref="picInput" onChange={this.handleImg} hidden/>
               </TableRowColumn>
               <TableRowColumn style={styles.picBox}>
@@ -197,6 +223,11 @@ const Repair = React.createClass({
           onRequestClose={this.handleTip}
           style={styles.tip}
         />
+        <Dialog
+          title='确定要提交？'
+          actions={submitActions}
+          open={this.state.openDialog}
+        ></Dialog>
       </div>
     )
   }
