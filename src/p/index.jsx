@@ -20,7 +20,7 @@ const styles = {
 const Bulletin = React.createClass({
   render() {
     const bulletin  = this.props.bulletin;
-    const time = new Date(bulletin.time).format('yyyy-MM-dd hh:mm');
+    const time = new Date(bulletin.createDate).format('yyyy-MM-dd hh:mm');
     return (
       <Card style={styles.card}>
         <CardHeader

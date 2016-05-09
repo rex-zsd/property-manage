@@ -35,6 +35,9 @@ const styles = {
     maxWidth: '100%',
     maxHeight: '100%',
     verticalAlign: 'middle'
+  },
+  red: {
+    color: 'red'
   }
 };
 
@@ -47,6 +50,12 @@ const RepairDetail = React.createClass({
   },
   componentWillMount() {
     const id = location.search.slice(1);
+    const statusMap = {
+      0: '待处理'
+    };
+    const statusClassMap = {
+      0: 'red'
+    };
     fetch(ZN.baseUrl + 'repair/detail?id=' + id, {
       method: "get",
       credentials: 'include'
@@ -59,7 +68,9 @@ const RepairDetail = React.createClass({
         content: repair.content,
         date: new Date(repair.date).format('yyyy-MM-dd'),
         picList: repair.imgList,
-        createDate: repair.createDate
+        createDate: repair.createDate,
+        status: statusMap[repair.status],
+        statusClass: statusClassMap[repair.status]
       });
     });
 
@@ -76,6 +87,10 @@ const RepairDetail = React.createClass({
               <TableRow displayBorder={false}>
                 <TableRowColumn style={styles.table.title}>创建时间</TableRowColumn>
                 <TableRowColumn>{new Date(this.state.createDate).format('yyyy-MM-dd hh:mm')}</TableRowColumn>
+              </TableRow>
+              <TableRow displayBorder={false}>
+                <TableRowColumn style={styles.table.title}>当前状态</TableRowColumn>
+                <TableRowColumn style={styles[this.state.statusClass]}>{this.state.status}</TableRowColumn>
               </TableRow>
               <TableRow displayBorder={false}>
                 <TableRowColumn style={styles.table.title}>报修类型</TableRowColumn>

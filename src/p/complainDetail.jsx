@@ -34,6 +34,9 @@ const styles = {
       paddingTop: '10px',
       paddingBottom: '10px'
     }
+  },
+  red: {
+    color: 'red'
   }
 };
 
@@ -46,6 +49,12 @@ const ComplainDetail = React.createClass({
   },
   componentWillMount() {
     const id = location.search.slice(1);
+    const statusMap = {
+      0: '待处理'
+    };
+    const statusClassMap = {
+      0: 'red'
+    };
     fetch(ZN.baseUrl + 'complain/detail?id=' + id, {
       method: "get",
       credentials: 'include'
@@ -56,7 +65,9 @@ const ComplainDetail = React.createClass({
       this.setState({
         content: complain.content,
         picList: complain.imgList,
-        createDate: complain.createDate
+        createDate: complain.createDate,
+        status: statusMap[complain.status],
+        statusClass: statusClassMap[complain.status]
       });
     });
   },
@@ -75,6 +86,10 @@ const ComplainDetail = React.createClass({
             <TableRow displayBorder={false}>
               <TableRowColumn style={styles.table.title}>创建时间</TableRowColumn>
               <TableRowColumn>{new Date(this.state.createDate).format('yyyy-MM-dd hh:mm')}</TableRowColumn>
+            </TableRow>
+            <TableRow displayBorder={false}>
+              <TableRowColumn style={styles.table.title}>当前状态</TableRowColumn>
+              <TableRowColumn style={styles[this.state.statusClass]}>{this.state.status}</TableRowColumn>
             </TableRow>
             <TableRow displayBorder={false}>
               <TableRowColumn style={styles.table.title}>投诉内容</TableRowColumn>
